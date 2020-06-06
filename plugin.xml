@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova.plugin.gc099printer" version="1.0.0" 
+    xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>GC099Printer</name>
+    <js-module name="GC099Printer" src="www/GC099Printer.js">
+        <clobbers target="gc099Printer" />
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="GC099Printer">
+                <param name="android-package" value="cordova.plugin.gc099printer.GC099Printer" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+        </config-file>
+        <source-file src="src/android/GC099Printer.java" target-dir="src/cordova/plugin/gc099printer/GC099Printer" />
+        <source-file src="src/android/UsbPrinterManager.java" target-dir="src/cordova/plugin/gc099printer/UsbPrinterManager" />
+<source-file src="src/android/com/usbsdk/A2.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/A2" />
+<source-file src="src/android/com/usbsdk/ASBStatus.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/ASBStatus" />
+<source-file src="src/android/com/usbsdk/BBB.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/BBB" />
+<source-file src="src/android/com/usbsdk/CCCC.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/CCCC" />
+<source-file src="src/android/com/usbsdk/DD1.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/DD1" />
+<source-file src="src/android/com/usbsdk/DDDD.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/DDDD" />
+<source-file src="src/android/com/usbsdk/DFDF4.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/DFDF4" />
+<source-file src="src/android/com/usbsdk/EEE.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/EEE" />
+<source-file src="src/android/com/usbsdk/EEE11A.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/EEE11A" />
+<source-file src="src/android/com/usbsdk/FFF.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/FFF" />
+<source-file src="src/android/com/usbsdk/GGG.java" target-dir="src/cordova/plugin/gc099printer/com/usbsdk/GGG" />
+<source-file src="src/android/com/comon/error/DFDF1.java" target-dir="src/cordova/plugin/gc099printer/com/comon/error/DFDF1" />
+<source-file src="src/android/com/posin/filebrowser/FileBrowser.java" target-dir="src/cordova/plugin/gc099printer/com/posin/filebrowser/FileBrowser" />
+<source-file src="src/android/com/posin/filebrowser/FileBrowserAdapter.java" target-dir="src/cordova/plugin/gc099printer/com/posin/filebrowser/FileBrowserAdapter" />
+
+<lib-file src="src/android/libs/HdxUtil.jar" />
+    </platform>
+</plugin>

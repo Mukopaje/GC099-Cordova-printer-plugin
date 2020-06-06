@@ -1,0 +1,25 @@
+{
+  "name": "cordova.plugin.gc099printer",
+  "version": "1.0.0",
+  "description": "GC099 Cordova Printer Plugin",
+  "cordova": {
+    "id": "cordova.plugin.gc099printer",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mukopaje/GC099-Cordova-printer-plugin.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Mukopaje Singogo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mukopaje/GC099-Cordova-printer-plugin/issues"
+  },
+  "homepage": "https://github.com/Mukopaje/GC099-Cordova-printer-plugin#readme"
+}
