@@ -1,27 +1,36 @@
 package cordova.plugin.gc099printer;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
+
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.util.Log;
+import android.content.Context;
 import android.widget.Toast;
+import android.app.Activity;
 import android.os.AsyncTask;
-import android.UsbPrinterManager;
+import android.os.Bundle;
+import cordova.plugin.gc099printer.UsbPrManger;
 
 /**
  * This class echoes a string called from JavaScript.
  */
 public class GC099Printer extends CordovaPlugin {
 
-    UsbPrinterManager usbPrManager;
+    UsbPrManger usbPrManger;
+    CordovaInterface cordovaInt;
     public String ReceiptContent;
+    private Context context = null;
+    private Context tContext = null;
+    
+    public static final String TAG = "GC099Printer";
 
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
@@ -45,13 +54,15 @@ public class GC099Printer extends CordovaPlugin {
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-		tContext = webView.getContext();
-        context = this.cordova.getActivity().getApplicationContext();
-
-        usbPrManger = new UsbPrinterManger(context);
+        tContext = webView.getContext(); 
+        context = this.cordova.getActivity().getApplicationContext();    
+        usbPrManger = new UsbPrManger(context);
+        // Toast.makeText(webView.getContext(), usbPrManger, Toast.LENGTH_LONG).show();
+        // Log.d(TAG, "Initialization - "+ usbPrManger);
         	
     }
 
+   
     public class PrintReceipt extends AsyncTask<Void, Void, String> {
 		@Override
 		protected void onPreExecute(){			
@@ -70,6 +81,31 @@ public class GC099Printer extends CordovaPlugin {
 			
 			try {			
                 System.out.println("content print started");
+        //         String tempXml="<?xml version=\"1.0\" encoding=\"utf-8\"?><root>\n" +
+        //         "<segment align=\"center\" font=\"Bold\" size=\"all\">店内加菜\n" +
+        //         "</segment>\n" +
+        //         "<segment align=\"center\" font=\"Bold\" size=\"standard\"> ****q****\n" +
+        //         " </segment>\n" +
+        //         "<segment align=\"left\" font=\"Bold\" size=\"standard\">桌号：大厅(1号桌)\n" +
+        //         "</segment>\n" +
+        //         "<segment align=\"left\" font=\"normal\" size=\"standard\">- - - - - - - - - - - - - - - - - - - - - - - -\n" +
+        //         "</segment>\n" +
+        //         "<segment align=\"left\" font=\"normal\" size=\"standard\">商品                 单价    数量/单位   金额\n" +
+        //         "</segment>\n" +
+        //         "<segment align=\"left\" font=\"Bold\" size=\"standard\">汤-1份-43.00\n" +
+        //         "</segment>\n" +
+        //         "<segment align=\"left\" font=\"normal\" size=\"standard\">ggggggg              43.00      1/份     43.00\n" +
+        //         "</segment>\n" +
+        //         "<segment align=\"left\" font=\"normal\" size=\"standard\">- - - - - - - - - - - - - - - - - - - - - - - -\n" +
+        //         "</segment>\n" +
+        //         "<segment align=\"left\" font=\"Bold\" size=\"standard\">数量：1                            金额：43.00\n" +
+        //         "</segment>\n" +
+        //         "<segment align=\"left\" font=\"normal\" size=\"standard\">- - - - - - - - - - - - - - - - - - - - - - - -\n" +
+        //         "</segment>\n" +
+        //         "<segment align=\"left\" font=\"normal\" size=\"standard\">操作员：13438186749        打印：03-07 14:20:02\n" +
+        //         "</segment>\n" +
+        //         "</root>\n";
+        // usbPrManger.printXMlStr(tempXml);
                 usbPrManger.test2(printContent1);
 				System.out.println("content print finished");						
 			}catch (Exception e) {
@@ -80,5 +116,66 @@ public class GC099Printer extends CordovaPlugin {
 			
 			return s1;	
 		}
-	}
+    }
+    
+    public static byte[] strToByteArray(String str){
+        if (str == null) {
+            return null;
+        }       
+        byte[] byteArray = str.getBytes();       
+        return byteArray;
+    }
+    
+    public static byte[] strToByteArray(String str,String encodeStr) throws UnsupportedEncodingException  {
+        if (str == null) {
+            return null;
+        }
+        byte[] byteArray = null;
+        if(encodeStr.equals("IBM852")){
+        	byteArray = str.getBytes("IBM852");
+        }else if (encodeStr.equals("GB2312")) {
+        	byteArray = str.getBytes("GB2312");
+		}else if (encodeStr.equals("ISO-8859-1")) {
+        	byteArray = str.getBytes("ISO-8859-1");
+		}else if (encodeStr.equals("UTF-8")) {
+        	byteArray = str.getBytes("UTF-8");
+		}else {
+			byteArray = str.getBytes();
+		}        
+        return byteArray;
+    }
+    
+    public static String checkEncoding(String str){
+        if (str == null) {
+            return null;
+        }
+        String encodestr =null;
+        if(str.equals("1B7430")){
+        	encodestr = "UTF-8";
+        }else if(str.equals("1B7431")) {
+        	encodestr = "GB2312";
+		}else if(str.equals("1B7412")) {
+        	encodestr = "IBM852";
+		}
+		else if(str.equals("1B7417")) {
+        	encodestr = "ISO-8859-1";
+		}else {
+			encodestr = "UTF-8";
+		}
+        return encodestr;
+    }
+
+    public static byte[] hexToBytes(String bcdStr) {
+        byte[] retValue = new byte[(int) (bcdStr.length() / 2)];
+        int k = 0;
+        for (int i = 0; i < bcdStr.length(); i += 2) {
+
+
+
+            retValue[(int) (i / 2)] = (byte) Integer.parseInt(bcdStr.substring(k, i + 2), 16);
+            k += 2;
+        }
+        return retValue;
+    }
 }
+
